@@ -28,13 +28,46 @@ async function run() {
     // awaitclient.connect();
 
     // db and Collection
-    // const userCollection = client.db('SummarCamp').collection('users')
-    // const classCollection = client.db('SummarCamp').collection('Classes')
-    // const selectedClassCollection = client.db('SummarCamp').collection('selectedClass')
-    // const enrolledClassCollection = client.db('SummarCamp').collection('enrolledClass')
-    // const paymentCollection = client.db('SummarCamp').collection('payment')
+    const userCollection = client.db("EasyAdmission").collection("users")
+    const collegeCollection = client.db("EasyAdmission").collection("colleges");
+    const reviewsCollection = client.db("EasyAdmission").collection("review");
+    const researchPaperCollection = client.db("EasyAdmission").collection("research-paper");
+    const selectedCollegesCollection = client.db("EasyAdmission").collection("selectedCollege");
+    
 
-   
+   // colleges data
+    app.get("/colleges", async (req, res) => {
+      const result = await collegesCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.get("/colleges/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await collegesCollection.findOne(query);
+      res.send(result);
+    });
+
+    // review data
+    app.get("/review", async (req, res) => {
+      const result = await reviewsCollection.find().toArray();
+      res.send(result);
+    });
+    // research paper data
+    app.get("/researchPapers", async (req, res) => {
+      const result = await researchPaperCollection.find().toArray();
+      res.send(result);
+    });
+    // selected colleges
+    app.get("/selectedColleges", async (req, res) => {
+      const result = await selectedCollegesCollection.find().toArray();
+      res.send(result);
+    });
+    app.post("/selectedColleges", async (req, res) => {
+      const college = req.body;
+      const result = await selectedCollegesCollection.insertOne(college);
+      res.send(result);
+    });
 
 
     // -----END-----
